@@ -45,7 +45,9 @@ isolated function validateAndExtractMemberMatchResources(davincihrex100:HRexMemb
         anydata? 'resource = check validateAndExtractParamResource(requestParams, param,
                 MEMBER_MATCH_PARAMETERS_INFO.get(param));
         if param != COVERAGE_TO_LINK && 'resource == () { // CoverageToLink is optional
-            return createMissingMandatoryParamError(param);
+            if param != CONSENT { // Consent is optional in hrex110. Hence skipping the validation here.
+                return createMissingMandatoryParamError(param);
+            }
         }
         processedResources[param] = 'resource;
     }
