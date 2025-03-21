@@ -11,6 +11,7 @@
 // specific language governing permissions and limitations
 // under the License.
 import ballerina/http;
+import ballerinax/health.clients.fhir;
 import ballerinax/health.fhir.r4;
 import ballerinax/health.fhir.r4.davincihrex100;
 import ballerinax/health.fhir.r4.uscore501;
@@ -23,6 +24,26 @@ enum MemberMatchParameter {
     COVERAGE_TO_MATCH = "CoverageToMatch",
     COVERAGE_TO_LINK = "CoverageToLink"
 };
+
+# Constant symbols
+const AMPERSAND = "&";
+const SLASH = "/";
+const QUOTATION_MARK = "\"";
+const QUESTION_MARK = "?";
+const EQUALS_SIGN = "=";
+const COMMA = ",";
+# FHIR  parameters 
+const _FORMAT = "_format";
+const _SUMMARY = "_summary";
+const _HISTORY = "_history";
+const METADATA = "metadata";
+const MODE = "mode";
+# Request Headers
+const ACCEPT_HEADER = "Accept";
+const PREFER_HEADER = "Prefer";
+const LOCATION = "Location";
+const CONTENT_TYPE = "Content-Type";
+const CONTENT_LOCATION = "Content-Location";
 
 # Map of `ParameterInfo` to hold information about member match parameters.
 final map<ParameterInfo> & readonly MEMBER_MATCH_PARAMETERS_INFO = {
@@ -140,3 +161,48 @@ isolated function createMissingMandatoryParamError(string paramName) returns r4:
     return r4:createFHIRError(message, r4:ERROR, r4:INVALID_REQUIRED, diagnostic = diagnostic,
             httpStatusCode = http:STATUS_BAD_REQUEST);
 }
+
+isolated function setSearchParams(map<string[]>? qparams) returns string {
+    string url = "";
+    if (qparams is map<string[]>) {
+        foreach string key in qparams.keys() {
+            foreach string param in qparams.get(key) {
+                url += key + EQUALS_SIGN + param + AMPERSAND;
+            }
+        }
+    }
+    return url.endsWith("&") ? url.substring(0, url.length() - 1) : url;
+}
+
+isolated function getBundleResponse(http:Response response) returns fhir:FHIRResponse|fhir:FHIRError {
+    do {
+        int statusCode = response.statusCode;
+        json|xml responseBody = check response.getJsonPayload();
+
+        if statusCode == 200 {
+            fhir:FHIRResponse fhirResponse = {httpStatusCode: statusCode, 'resource: responseBody, serverResponseHeaders: {}};
+            return fhirResponse;
+        } else {
+            fhir:FHIRServerError fhirServerError = error("FHIR_SERVER_ERROR", httpStatusCode = statusCode, 'resource = responseBody, serverResponseHeaders = {});
+            return fhirServerError;
+        }
+    } on fail var e {
+        return error(string `FHIR_CONNECTOR_ERROR: ${e.message()}`, errorDetails = e);
+    }
+}
+
+isolated function getFhirResourceResponse(http:Response response) returns fhir:FHIRResponse|fhir:FHIRError {
+    do {
+        xml|json responseBody = check response.getJsonPayload();
+        int statusCode = response.statusCode;
+        if statusCode == 200 {
+            return {httpStatusCode: statusCode, 'resource: responseBody, serverResponseHeaders: {}};
+        } else {
+            return error("FHIR_SERVER_ERROR", httpStatusCode = statusCode, 'resource = responseBody, serverResponseHeaders = {});
+        }
+    } on fail var e {
+        return error(string `FHIR_CONNECTOR_ERROR: ${e.message()}`, errorDetails = e);
+    }
+
+}
+
