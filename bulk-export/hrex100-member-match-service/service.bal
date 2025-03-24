@@ -14,6 +14,7 @@ import ballerinax/health.clients.fhir;
 import ballerinax/health.fhir.r4;
 import ballerinax/health.fhirr4;
 import ballerinax/health.fhir.r4.davincihrex100;
+import ballerina/log;
 
 // FHIR repository configs
 configurable string fhirRepositoryUrl = ?;
@@ -73,6 +74,7 @@ service / on new fhirr4:Listener(9095, apiConfig) {
         davincihrex100:MemberMatchResources memberMatchResources =
                 check validateAndExtractMemberMatchResources(parameters);
 
+        log:printDebug("Member Matcher invoked");
         // Match member
         davincihrex100:MemberIdentifier memberIdentifier = check fhirMemberMatcher.matchMember(memberMatchResources);
 

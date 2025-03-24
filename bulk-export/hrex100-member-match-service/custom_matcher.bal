@@ -50,6 +50,7 @@ public isolated class DemoFHIRMemberMatcher {
             log:printError("Invalid type for \"memberMatchResources\". Expected type: MemberMatchResources.");
             return r4:createFHIRError("Internal server error", r4:ERROR, r4:PROCESSING, httpStatusCode = http:STATUS_INTERNAL_SERVER_ERROR);
         }
+        log:printDebug("Custom matcher engaged");
 
         // Member match resources
         uscore501:USCorePatientProfile memberPatient = memberMatchResources.memberPatient;
