@@ -47,10 +47,10 @@ const CONTENT_LOCATION = "Content-Location";
 
 # Map of `ParameterInfo` to hold information about member match parameters.
 final map<ParameterInfo> & readonly MEMBER_MATCH_PARAMETERS_INFO = {
-    [MEMBER_PATIENT] : {profile: "USCorePatientProfile", typeDesc: uscore501:USCorePatientProfile},
-    [CONSENT] : {profile: "HRexConsent", typeDesc: davincihrex100:HRexConsent},
-    [COVERAGE_TO_MATCH] : {profile: "HRexCoverage", typeDesc: davincihrex100:HRexCoverage},
-    [COVERAGE_TO_LINK] : {profile: "HrexCoverage", typeDesc: davincihrex100:HRexCoverage}
+    [MEMBER_PATIENT]: {profile: "USCorePatientProfile", typeDesc: uscore501:USCorePatientProfile},
+    [CONSENT]: {profile: "HRexConsent", typeDesc: davincihrex100:HRexConsent},
+    [COVERAGE_TO_MATCH]: {profile: "HRexCoverage", typeDesc: davincihrex100:HRexCoverage},
+    [COVERAGE_TO_LINK]: {profile: "HrexCoverage", typeDesc: davincihrex100:HRexCoverage}
 };
 
 # Validates and extracts the parameter resources from member match request parameters.

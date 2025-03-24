@@ -10,11 +10,12 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
+
+import ballerina/log;
 import ballerinax/health.clients.fhir;
 import ballerinax/health.fhir.r4;
 import ballerinax/health.fhirr4;
 import ballerinax/health.fhir.r4.davincihrex100;
-import ballerina/log;
 
 // FHIR repository configs
 configurable string fhirRepositoryUrl = ?;
@@ -26,7 +27,7 @@ configurable AuthConfig? consentServiceAuthConfig = ();
 configurable map<string|string[]>? consentServiceRequestHeaders = ();
 
 // Coverage service configs
-configurable string coverageServiceUrl = "";
+configurable string coverageServiceUrl = ?;
 configurable AuthConfig? coverageServiceAuthConfig = ();
 configurable map<string|string[]>? coverageServiceRequestHeaders = ();
 
@@ -96,5 +97,26 @@ service / on new fhirr4:Listener(9095, apiConfig) {
                 }
             }
         };
+    }
+
+    isolated resource function post fhir/r4/matcher(r4:FHIRContext context,
+            davincihrex100:HRexMemberMatchRequestParameters parameters) returns davincihrex100:HRexMemberMatchResponseParameters|r4:FHIRError {
+        return {
+            'parameter: {
+                name: "MemberIdentifier",
+                valueIdentifier: {
+                    'type: {
+                        coding: [
+                            {
+                                system: "http://terminology.hl7.org/3.1.0/CodeSystem-v2-0203.html",
+                                code: "MB"
+                            }
+                        ]
+                    },
+                    value: "memberIdentifier"
+                }
+            }
+        };
+
     }
 }

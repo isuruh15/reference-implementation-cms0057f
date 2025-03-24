@@ -65,9 +65,9 @@ public isolated class DemoFHIRMemberMatcher {
         international401:Patient[] nameMatchedPatients = check self.getNameMatchedPatients(name);
 
         international401:Patient oldPatient = {};
-        if nameMatchedPatients.length()==0{
+        if nameMatchedPatients.length() == 0 {
             return INTERNAL_ERROR;
-        }else if nameMatchedPatients.length()==1{
+        } else if nameMatchedPatients.length() == 1 {
             oldPatient = nameMatchedPatients[0];
         }
 
@@ -100,20 +100,18 @@ public isolated class DemoFHIRMemberMatcher {
             return <hrex100:MemberIdentifier>patientId;
         }
 
-        return r4:createFHIRError("No match found", r4:ERROR,r4:PROCESSING_NOT_FOUND, httpStatusCode = http:STATUS_UNPROCESSABLE_ENTITY);
+        return r4:createFHIRError("No match found", r4:ERROR, r4:PROCESSING_NOT_FOUND, httpStatusCode = http:STATUS_UNPROCESSABLE_ENTITY);
     }
 
-    private isolated function filterPatientsByDemographics(international401:Patient[] nameMatchedPatients, uscore501:USCorePatientProfile memberPatient) 
-    returns international401:Patient{
-        international401:Patient filteredPatient={};
+    private isolated function filterPatientsByDemographics(international401:Patient[] nameMatchedPatients, uscore501:USCorePatientProfile memberPatient)
+    returns international401:Patient {
+        international401:Patient filteredPatient = {};
         uscore501:USCorePatientProfileGender incomingPatientGender = memberPatient.gender;
         r4:date? birthDate = memberPatient.birthDate;
 
-        foreach international401:Patient patient in nameMatchedPatients{
+        foreach international401:Patient patient in nameMatchedPatients {
 
         }
-
-
 
         return filteredPatient;
     }
@@ -169,7 +167,7 @@ public isolated class DemoFHIRMemberMatcher {
     private isolated function search(string 'type, map<string[]>? searchParameters = (), fhir:MimeType? returnMimeType = ())
     returns fhir:FHIRResponse|fhir:FHIRError {
         string requestUrl = SLASH + 'type + QUESTION_MARK + setSearchParams(searchParameters);
-        map<string> headerMap = {[ACCEPT_HEADER] : "application/fhir+json"};
+        map<string> headerMap = {[ACCEPT_HEADER]: "application/fhir+json"};
         lock {
             headerMap["Choreo-API-Key"] = patientChoreoapikey.cloneReadOnly();
         }
@@ -187,7 +185,7 @@ public isolated class DemoFHIRMemberMatcher {
     }
 
     private isolated function getById(string 'type, string id, fhir:MimeType? returnMimeType = ()) returns fhir:FHIRResponse|fhir:FHIRError {
-        map<string> headerMap = {[ACCEPT_HEADER] : "application/fhir+json"};
+        map<string> headerMap = {[ACCEPT_HEADER]: "application/fhir+json"};
         string requestURL = SLASH + 'type + SLASH + id;
         lock {
             headerMap["Choreo-API-Key"] = coverageChoreoapikey.cloneReadOnly();

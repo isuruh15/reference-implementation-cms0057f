@@ -1,0 +1,79 @@
+openapi: 3.0.1
+info:
+  title: Member Match Service
+  version: 0.1.0
+servers:
+- url: "{server}:{port}/member-match"
+  variables:
+    server:
+      default: http://localhost
+    port:
+      default: "9095"
+paths:
+  /fhir/r4/Patient/$member-match:
+    post:
+      operationId: postExport
+      requestBody:
+        content:
+          application/fhir+json:
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+        "500":
+          description: InternalServerError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorPayload'
+        "400":
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorPayload'
+ 
+components:
+  schemas:
+    ErrorPayload:
+      required:
+      - message
+      - method
+      - path
+      - reason
+      - status
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: string
+        status:
+          type: integer
+          format: int64
+        reason:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        method:
+          type: string
+    MatchedPatient:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+        canonical:
+          type: string
+        identifiers:
+          type: object
+          additionalProperties:
+            type: string
+      additionalProperties: false
+      description: Record to hold matched patients.
