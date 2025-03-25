@@ -13,10 +13,6 @@ paths:
   /fhir/r4/Patient/membermatch:
     post:
       operationId: postExport
-      requestBody:
-        content:
-          application/fhir+json:
-        required: true
       responses:
         "201":
           description: Created
