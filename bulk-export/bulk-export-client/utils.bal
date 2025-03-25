@@ -16,6 +16,7 @@ import ballerina/http;
 import ballerina/io;
 import ballerina/log;
 import ballerina/task;
+import ballerinax/health.clients.fhir;
 import ballerinax/health.fhir.r4;
 import ballerinax/health.fhir.r4.international401;
 
@@ -253,6 +254,21 @@ public isolated function addQueryParam(string queryString, string key, string va
     } else {
         return string `${queryString}&${key}=${value}`;
     }
+}
+
+isolated function getFhirResourceResponse(http:Response response) returns fhir:FHIRResponse|fhir:FHIRError {
+    do {
+        xml|json responseBody = check response.getJsonPayload();
+        int statusCode = response.statusCode;
+        if statusCode == 201 {
+            return {httpStatusCode: statusCode, 'resource: responseBody, serverResponseHeaders: {}};
+        } else {
+            return error("FHIR_SERVER_ERROR", httpStatusCode = statusCode, 'resource = responseBody, serverResponseHeaders = {});
+        }
+    } on fail var e {
+        return error(string `FHIR_CONNECTOR_ERROR: ${e.message()}`, errorDetails = e);
+    }
+
 }
 
 # This class holds information related to the Ballerina task that used to poll the status endpoint.

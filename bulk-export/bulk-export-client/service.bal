@@ -17,11 +17,14 @@ import ballerina/log;
 import ballerina/mime;
 import ballerina/task;
 import ballerina/uuid;
+import ballerinax/health.clients.fhir;
 import ballerinax/health.fhir.r4.international401;
+import ballerinax/health.fhir.r4.parser;
 
 configurable BulkExportServerConfig sourceServerConfig = ?;
 configurable BulkExportClientConfig clientServiceConfig = ?;
 configurable TargetServerConfig targetServerConfig = ?;
+configurable string sourceServerBaseURL = ?;
 
 http:OAuth2ClientCredentialsGrantConfig config = {
     tokenUrl: sourceServerConfig.tokenUrl,
@@ -31,6 +34,7 @@ http:OAuth2ClientCredentialsGrantConfig config = {
 };
 
 isolated http:Client statusClient = check new (sourceServerConfig.baseUrl);
+isolated http:Client payerFhirClient = check new (sourceServerBaseURL);
 
 isolated service /bulk on new http:Listener(9099) {
 
@@ -239,6 +243,7 @@ isolated service /bulk on new http:Listener(9099) {
 
     }
 }
+
 // File API
 
 isolated service /file on new http:Listener(8099) {
@@ -265,6 +270,42 @@ isolated service /file on new http:Listener(8099) {
             log:printError("Error occurred while setting the content type: ");
         }
         return response;
+
+    }
+
+}
+
+isolated service /member on new http:Listener(7099) {
+
+    // Resource function to fetch the exported files.
+    //
+    // @param req - The HTTP request.
+    // @param exportId - The ID of the export task.
+    // @param resourceType - The type of the resource to be exported.
+    //
+    // @return The response containing the downloaded file.
+    isolated resource function post 'match(http:Request req) returns error|json {
+
+        json paramsPayload = check req.getJsonPayload();
+
+        international401:Parameters parametersResource = <international401:Parameters>check parser:parse(paramsPayload, international401:Parameters);
+
+        map<string> headerMap = {["Accept"]: "application/fhir+json", ["Content-Type"]: "application/fhir+json"};
+        string requestURL = string `/Patient/$member-match`;
+        http:Response response;
+        do {
+            lock {
+                response = check payerFhirClient->post(requestURL, parametersResource.clone().toJson(), headerMap.clone());
+            }
+            log:printInfo((check response.getJsonPayload()).toBalString());
+            fhir:FHIRResponse readRes = check getFhirResourceResponse(response);
+            return readRes.'resource.toJson();
+        } on fail error e {
+            if e is fhir:FHIRError {
+                return e;
+            }
+            return error(string `FHIR_CONNECTOR_ERROR: ${e.message()}`, errorDetails = e);
+        }
 
     }
 
