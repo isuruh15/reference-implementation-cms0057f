@@ -39,8 +39,8 @@ public isolated class DemoFHIRMemberMatcher {
     public function init() returns error? {
         // self.fhirPatientClient = check new (fhirPatientClientConfig);
         // self.fhirCoverageClient = check new (fhirCoverageClientConfig);
-        self.fhirPatientClient = check new (patientServiceurl);
-        self.fhirCoverageClient = check new (coverageServiceurl);
+        self.fhirPatientClient = check new (fhirRepositoryUrl);
+        self.fhirCoverageClient = check new (coverageServiceUrl);
 
     }
 
