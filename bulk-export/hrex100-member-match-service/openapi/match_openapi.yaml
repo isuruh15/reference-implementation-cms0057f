@@ -23,19 +23,19 @@ paths:
         "201":
           description: Created
           content:
-            application/json:
+            application/fhir+json:
               schema:
                 type: object
         "500":
           description: InternalServerError
           content:
-            application/json:
+            application/fhir+json:
               schema:
                 $ref: '#/components/schemas/ErrorPayload'
         "400":
           description: BadRequest
           content:
-            application/json:
+            application/fhir+json:
               schema:
                 $ref: '#/components/schemas/ErrorPayload'
   /fhir/r4/matcher:
@@ -51,19 +51,19 @@ paths:
         "201":
           description: Created
           content:
-            application/json:
+            application/fhir+json:
               schema:
                 type: object
         "500":
           description: InternalServerError
           content:
-            application/json:
+            application/fhir+json:
               schema:
                 $ref: '#/components/schemas/ErrorPayload'
         "400":
           description: BadRequest
           content:
-            application/json:
+            application/fhir+json:
               schema:
                 $ref: '#/components/schemas/ErrorPayload'
  
