@@ -14,6 +14,34 @@ tags:
 - name: Patient
 - name: 4.0.1
 paths:
+  /fhir/r4/Patient/$member-match:
+    post:
+      operationId: postExport
+      requestBody:
+        content:
+          application/fhir+json:
+            schema:
+              type: object
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/fhir+json:
+              schema:
+                type: object
+        "500":
+          description: InternalServerError
+          content:
+            application/fhir+json:
+              schema:
+                type: object
+        "400":
+          description: BadRequest
+          content:
+            application/fhir+json:
+              schema:
+                type: object
   /fhir/r4/Patient:
     get:
       tags:
