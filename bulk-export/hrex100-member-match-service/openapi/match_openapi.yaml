@@ -10,7 +10,7 @@ servers:
     port:
       default: "9095"
 paths:
-  /fhir/r4/Patient/$member-match:
+  /fhir/r4/Patient/\$member\-match:
     post:
       operationId: postExport
       requestBody:
