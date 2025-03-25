@@ -175,6 +175,8 @@ service /Coverage on new fhirr4:Listener(9091, apiConfigCoverage) {
 
     // Read the current state of single resource based on its id.
     isolated resource function get fhir/r4/Coverage/[string id](r4:FHIRContext fhirContext) returns Coverage|r4:OperationOutcome|r4:FHIRError {
+
+        log:printDebug("Getting Coverage by Id");
         return getCoverageById(id);
     }
 
@@ -185,6 +187,8 @@ service /Coverage on new fhirr4:Listener(9091, apiConfigCoverage) {
 
     // Search for resources based on a set of criteria.
     isolated resource function get fhir/r4/Coverage(r4:FHIRContext fhirContext) returns r4:Bundle|r4:OperationOutcome|r4:FHIRError {
+
+        log:printDebug("Searching Coverage by Id");
         map<string[]> queryParamsMap = getQueryParamsMap(fhirContext.getRequestSearchParameters());
         return searchCoverage(queryParamsMap);
     }

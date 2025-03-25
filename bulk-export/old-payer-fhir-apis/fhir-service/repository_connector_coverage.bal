@@ -3,6 +3,7 @@ import ballerinax/health.clients.fhir;
 import ballerinax/health.fhir.r4;
 import ballerinax/health.fhir.r4.international401;
 import ballerinax/health.fhir.r4.parser;
+import ballerina/log;
 
 // http:OAuth2ClientCredentialsGrantConfig ehrSystemAuthConfig = {
 //     tokenUrl: "https://login.microsoftonline.com/da76d684-740f-4d94-8717-9d5fb21dd1f9/oauth2/token",
@@ -25,6 +26,8 @@ import ballerinax/health.fhir.r4.parser;
 isolated international401:Coverage[] coverages = [];
 
 public isolated function createCoverage(international401:Coverage payload) returns r4:FHIRError|international401:Coverage {
+
+    log:printDebug("Creating Coverage");
     international401:Coverage|error coverage = parser:parseWithValidation(payload.toJson(), international401:Coverage).ensureType();
 
     if coverage is error {
@@ -43,6 +46,7 @@ public isolated function createCoverage(international401:Coverage payload) retur
 }
 
 public isolated function getCoverageById(string id) returns r4:FHIRError|international401:Coverage {
+    log:printDebug("Searching Coverage by Id");
     lock {
         foreach var item in coverages {
             string result = item.id ?: "";
@@ -70,6 +74,8 @@ public isolated function deleteCoverage(string 'resource, string id) returns r4:
 }
 
 public isolated function searchCoverage(map<string[]>? searchParameters = ()) returns r4:FHIRError|r4:Bundle {
+
+    log:printDebug("Searching Coverage");
     r4:Bundle bundle = {
         'type: "collection"
     };
