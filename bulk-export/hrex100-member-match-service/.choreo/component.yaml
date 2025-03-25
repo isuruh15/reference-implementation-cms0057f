@@ -28,7 +28,13 @@ endpoints:
     schemaFilePath: openapi/match_openapi.yaml
 dependencies:
     connectionReferences:
-    - name: patient-cms-connection
-      resourceRef: service:/cms-0057-f/patient-service/v1/803f0/PROJECT
-    - name: coverage-cms-connection
-      resourceRef: service:/cms-0057-f/coverage-service/v1/803f0/PROJECT
+    - name: old-payer-patient-connection
+      resourceRef: service:/unitedcare-standard-plan/patient-service/v1/803f0/PROJECT
+    - name: old-payer-coverage-connection
+      resourceRef: service:/unitedcare-standard-plan/coverage-service/v1/6c05f/PROJECT
+# dependencies:
+#     connectionReferences:
+#     - name: patient-cms-connection
+#       resourceRef: service:/cms-0057-f/patient-service/v1/803f0/PROJECT
+#     - name: coverage-cms-connection
+#       resourceRef: service:/cms-0057-f/coverage-service/v1/803f0/PROJECT

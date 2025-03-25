@@ -9,10 +9,10 @@ import ballerinax/health.fhir.r4.uscore501;
 
 // sample ballerina code snippet
 
-final string patientServiceurl = os:getEnv("CHOREO_PATIENT_CMS_CONNECTION_SERVICEURL");
-final string patientChoreoapikey = os:getEnv("CHOREO_PATIENT_CMS_CONNECTION_CHOREOAPIKEY");
-final string coverageServiceurl = os:getEnv("CHOREO_COVERAGE_CMS_CONNECTION_SERVICEURL");
-final string coverageChoreoapikey = os:getEnv("CHOREO_COVERAGE_CMS_CONNECTION_CHOREOAPIKEY");
+final string patientServiceurl = os:getEnv("CHOREO_OLD_PAYER_PATIENT_CONNECTION_SERVICEURL");
+final string patientChoreoapikey = os:getEnv("CHOREO_OLD_PAYER_PATIENT_CONNECTION_CHOREOAPIKEY");
+final string coverageServiceurl = os:getEnv("CHOREO_OLD_PAYER_COVERAGE_CONNECTION_SERVICEURL");
+final string coverageChoreoapikey = os:getEnv("CHOREO_OLD_PAYER_COVERAGE_CONNECTION_CHOREOAPIKEY");
 
 final fhir:FHIRConnectorConfig fhirPatientClientConfig = {
     baseURL: patientServiceurl,
