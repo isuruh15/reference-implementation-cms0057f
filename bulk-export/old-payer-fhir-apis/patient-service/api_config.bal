@@ -15,7 +15,7 @@
 // Developers are allowed to modify this file as per the requirement.
 import ballerinax/health.fhir.r4;
 
-final r4:ResourceAPIConfig apiConfigPatient = {
+final r4:ResourceAPIConfig apiConfig = {
     resourceType: "Patient",
     profiles: [
         "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
@@ -190,19 +190,4 @@ final r4:ResourceAPIConfig apiConfigPatient = {
         enabled: true,
         auditServiceUrl: "http://audit-service-3847061127:9093"
     }
-};
-
-final r4:ResourceAPIConfig apiConfigCoverage = {
-    resourceType: "Coverage",
-    profiles: [
-        "http://hl7.org/fhir/StructureDefinition/Coverage"
-    ],
-    defaultProfile: (),
-    searchParameters: [
-    ],
-    operations: [
-
-    ],
-    serverConfig: (),
-    authzConfig: ()
 };

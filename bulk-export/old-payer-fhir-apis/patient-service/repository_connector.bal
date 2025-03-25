@@ -1,7 +1,6 @@
 import ballerina/http;
 import ballerinax/health.clients.fhir;
 import ballerinax/health.fhir.r4;
-import ballerinax/health.fhir.r4.international401;
 import ballerinax/health.fhir.r4.parser;
 import ballerinax/health.fhir.r4.uscore501;
 
@@ -248,76 +247,6 @@ function init() returns error? {
             patients.push(patient);
 
         }
-    }
-
-    lock {
-        json coverageJson = {
-            "resourceType": "Coverage",
-            "id": "367",
-            "meta": {
-                "profile": [
-                    "http://hl7.org/fhir/StructureDefinition/Coverage"
-                ]
-            },
-            "status": "active",
-            "subscriber": {
-                "reference": "Patient/588675dc-e80e-4528-a78f-af10f9755f23"
-            },
-            "subscriberId": "UC-123456789",
-            "beneficiary": {
-                "reference": "Patient/588675dc-e80e-4528-a78f-af10f9755f23"
-            },
-            "payor": [
-                {
-                    "reference": "Organization/50"
-                }
-            ],
-            "class": [
-                {
-                    "type": {
-                        "coding": [
-                            {
-                                "system": "http://terminology.hl7.org/CodeSystem/coverage-class",
-                                "code": "group",
-                                "display": "Group"
-                            }
-                        ]
-                    },
-                    "value": "UC-Group-001",
-                    "name": "UnitedCare Standard Plan"
-                }
-            ],
-            "period": {
-                "start": "2025-01-01",
-                "end": "2025-12-31"
-            },
-            "network": "UC-Preferred-Network",
-            "costToBeneficiary": [
-                {
-                    "type": {
-                        "coding": [
-                            {
-                                "system": "http://terminology.hl7.org/CodeSystem/coverage-copay-type",
-                                "code": "copay",
-                                "display": "CoPay"
-                            }
-                        ]
-                    },
-                    "valueMoney": {
-                        "value": 50.00,
-                        "currency": "USD"
-                    },
-                    "valueQuantity": {
-                        "value": 1,
-                        "unit": "visit",
-                        "system": "http://unitsofmeasure.org",
-                        "code": "visit"
-                    }
-                }
-            ]
-        };
-        international401:Coverage coverage = check parser:parseWithValidation(coverageJson, international401:Coverage).ensureType();
-        coverages.push(coverage);
     }
 
 }

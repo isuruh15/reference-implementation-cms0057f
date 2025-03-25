@@ -3,7 +3,6 @@ import ballerinax/health.clients.fhir;
 import ballerinax/health.fhir.r4;
 import ballerinax/health.fhir.r4.international401;
 import ballerinax/health.fhir.r4.parser;
-import ballerina/log;
 
 // http:OAuth2ClientCredentialsGrantConfig ehrSystemAuthConfig = {
 //     tokenUrl: "https://login.microsoftonline.com/da76d684-740f-4d94-8717-9d5fb21dd1f9/oauth2/token",
@@ -24,10 +23,9 @@ import ballerina/log;
 // isolated fhir:FHIRConnector fhirConnectorObj = check new (ehrSystemConfig);
 
 isolated international401:Coverage[] coverages = [];
+isolated int createOperationNextId = 368;
 
-public isolated function createCoverage(international401:Coverage payload) returns r4:FHIRError|international401:Coverage {
-
-    log:printDebug("Creating Coverage");
+public isolated function create(international401:Coverage payload) returns r4:FHIRError|international401:Coverage {
     international401:Coverage|error coverage = parser:parseWithValidation(payload.toJson(), international401:Coverage).ensureType();
 
     if coverage is error {
@@ -45,8 +43,7 @@ public isolated function createCoverage(international401:Coverage payload) retur
     }
 }
 
-public isolated function getCoverageById(string id) returns r4:FHIRError|international401:Coverage {
-    log:printDebug("Searching Coverage by Id");
+public isolated function getById(string id) returns r4:FHIRError|international401:Coverage {
     lock {
         foreach var item in coverages {
             string result = item.id ?: "";
@@ -59,23 +56,21 @@ public isolated function getCoverageById(string id) returns r4:FHIRError|interna
     return r4:createFHIRError(string `Cannot find a Coverage resource with id: ${id}`, r4:ERROR, r4:INVALID, httpStatusCode = http:STATUS_NOT_FOUND);
 }
 
-public isolated function updateCoverage(json payload) returns r4:FHIRError|fhir:FHIRResponse {
+public isolated function update(json payload) returns r4:FHIRError|fhir:FHIRResponse {
     return r4:createFHIRError("Not implemented", r4:ERROR, r4:INVALID, httpStatusCode = http:STATUS_NOT_IMPLEMENTED);
 
 }
 
-public isolated function patchCoverageResource(string 'resource, string id, json payload) returns r4:FHIRError|fhir:FHIRResponse {
+public isolated function patchResource(string 'resource, string id, json payload) returns r4:FHIRError|fhir:FHIRResponse {
     return r4:createFHIRError("Not implemented", r4:ERROR, r4:INVALID, httpStatusCode = http:STATUS_NOT_IMPLEMENTED);
 }
 
-public isolated function deleteCoverage(string 'resource, string id) returns r4:FHIRError|fhir:FHIRResponse {
+public isolated function delete(string 'resource, string id) returns r4:FHIRError|fhir:FHIRResponse {
     return r4:createFHIRError("Not implemented", r4:ERROR, r4:INVALID, httpStatusCode = http:STATUS_NOT_IMPLEMENTED);
 
 }
 
-public isolated function searchCoverage(map<string[]>? searchParameters = ()) returns r4:FHIRError|r4:Bundle {
-
-    log:printDebug("Searching Coverage");
+public isolated function search(map<string[]>? searchParameters = ()) returns r4:FHIRError|r4:Bundle {
     r4:Bundle bundle = {
         'type: "collection"
     };
@@ -99,7 +94,7 @@ public isolated function searchCoverage(map<string[]>? searchParameters = ()) re
         foreach var 'key in searchParameters.keys() {
             match 'key {
                 "_id" => {
-                    international401:Coverage byId = check getCoverageById(searchParameters.get('key)[0]);
+                    international401:Coverage byId = check getById(searchParameters.get('key)[0]);
                     bundle.entry = [
                         {
                             'resource: byId
@@ -115,4 +110,77 @@ public isolated function searchCoverage(map<string[]>? searchParameters = ()) re
     }
 
     return bundle;
+}
+
+function init() returns error? {
+    lock {
+        json coverageJson = {
+            "resourceType": "Coverage",
+            "id": "367",
+            "meta": {
+                "profile": [
+                    "http://hl7.org/fhir/StructureDefinition/Coverage"
+                ]
+            },
+            "status": "active",
+            "subscriber": {
+                "reference": "Patient/588675dc-e80e-4528-a78f-af10f9755f23"
+            },
+            "subscriberId": "UC-123456789",
+            "beneficiary": {
+                "reference": "Patient/588675dc-e80e-4528-a78f-af10f9755f23"
+            },
+            "payor": [
+                {
+                    "reference": "Organization/50"
+                }
+            ],
+            "class": [
+                {
+                    "type": {
+                        "coding": [
+                            {
+                                "system": "http://terminology.hl7.org/CodeSystem/coverage-class",
+                                "code": "group",
+                                "display": "Group"
+                            }
+                        ]
+                    },
+                    "value": "UC-Group-001",
+                    "name": "UnitedCare Standard Plan"
+                }
+            ],
+            "period": {
+                "start": "2025-01-01",
+                "end": "2025-12-31"
+            },
+            "network": "UC-Preferred-Network",
+            "costToBeneficiary": [
+                {
+                    "type": {
+                        "coding": [
+                            {
+                                "system": "http://terminology.hl7.org/CodeSystem/coverage-copay-type",
+                                "code": "copay",
+                                "display": "CoPay"
+                            }
+                        ]
+                    },
+                    "valueMoney": {
+                        "value": 50.00,
+                        "currency": "USD"
+                    },
+                    "valueQuantity": {
+                        "value": 1,
+                        "unit": "visit",
+                        "system": "http://unitsofmeasure.org",
+                        "code": "visit"
+                    }
+                }
+            ]
+        };
+        international401:Coverage coverage = check parser:parseWithValidation(coverageJson, international401:Coverage).ensureType();
+        coverages.push(coverage);
+    
+    }
 }
