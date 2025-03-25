@@ -69,6 +69,8 @@ public isolated class DemoFHIRMemberMatcher {
             return INTERNAL_ERROR;
         } else if nameMatchedPatients.length() == 1 {
             oldPatient = nameMatchedPatients[0];
+        }else {
+            oldPatient = self.filterPatientsByDemographics(nameMatchedPatients.clone(),memberPatient.clone());
         }
 
         string patientId = <string>oldPatient.id;
@@ -90,6 +92,7 @@ public isolated class DemoFHIRMemberMatcher {
         string oldBeneficiaryRef = <string>oldCoverage.beneficiary.reference;
 
         if oldBeneficiaryRef != incomingCoverageBeneficiary.reference {
+            log:printError(string `Beneficiaries Mismatch. Old reference:${oldBeneficiaryRef}  Patient ID:${patientId}`);
             //verify with incoming beneficiary reference
             return INTERNAL_ERROR;
         }
@@ -109,9 +112,13 @@ public isolated class DemoFHIRMemberMatcher {
         uscore501:USCorePatientProfileGender incomingPatientGender = memberPatient.gender;
         r4:date? birthDate = memberPatient.birthDate;
 
-        foreach international401:Patient patient in nameMatchedPatients {
+        log:printDebug(string `Demographic values from the request: Gender = ${incomingPatientGender} , DoB = ${birthDate.toBalString()}`);
 
+        foreach international401:Patient patient in nameMatchedPatients {
+            // Additional filter logic can be added here.
         }
+        // Selecting the first element as the matched patient for the reference Impl
+        filteredPatient = nameMatchedPatients[0];
 
         return filteredPatient;
     }
