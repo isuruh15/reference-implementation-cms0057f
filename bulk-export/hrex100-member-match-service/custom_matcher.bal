@@ -69,8 +69,8 @@ public isolated class DemoFHIRMemberMatcher {
             return INTERNAL_ERROR;
         } else if nameMatchedPatients.length() == 1 {
             oldPatient = nameMatchedPatients[0];
-        }else {
-            oldPatient = self.filterPatientsByDemographics(nameMatchedPatients.clone(),memberPatient.clone());
+        } else {
+            oldPatient = self.filterPatientsByDemographics(nameMatchedPatients.clone(), memberPatient.clone());
         }
 
         string patientId = <string>oldPatient.id;
@@ -97,8 +97,12 @@ public isolated class DemoFHIRMemberMatcher {
             return INTERNAL_ERROR;
         }
 
+        log:printDebug(oldBeneficiaryRef.substring(8));
+
+        log:printDebug(patientId);
+
         // If both beneficiaryRef and oldPatient.id are same, we can derive it as a match
-        if oldBeneficiaryRef == patientId {
+        if oldBeneficiaryRef.substring(8) == patientId {
             //match found
             return <hrex100:MemberIdentifier>patientId;
         }
