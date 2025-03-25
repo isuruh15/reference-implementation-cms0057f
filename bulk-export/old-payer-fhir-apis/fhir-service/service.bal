@@ -37,7 +37,7 @@ public type Coverage international401:Coverage;
 
 # A service representing a network-accessible API
 # bound to port `9090`.
-service /Patient on new fhirr4:Listener(9090, apiConfigPatient) {
+isolated service /Patient on new fhirr4:Listener(9090, apiConfigPatient) {
 
     // Implementation of the $export operation
     isolated resource function post fhir/r4/Patient/\$export(r4:FHIRContext fhirContext, international401:Parameters parameters) returns r4:FHIRError|r4:OperationOutcome|error {
@@ -169,9 +169,9 @@ service /Patient on new fhirr4:Listener(9090, apiConfigPatient) {
     isolated resource function get fhir/r4/Patient/_history(r4:FHIRContext fhirContext) returns r4:Bundle|r4:OperationOutcome|r4:FHIRError {
         return r4:createFHIRError("Not implemented", r4:ERROR, r4:INFORMATIONAL, httpStatusCode = http:STATUS_NOT_IMPLEMENTED);
     }
-};
+}
 
-service /Coverage on new fhirr4:Listener(9091, apiConfigCoverage) {
+isolated service /Coverage on new fhirr4:Listener(9091, apiConfigCoverage) {
 
     // Read the current state of single resource based on its id.
     isolated resource function get fhir/r4/Coverage/[string id](r4:FHIRContext fhirContext) returns Coverage|r4:OperationOutcome|r4:FHIRError {
@@ -222,4 +222,4 @@ service /Coverage on new fhirr4:Listener(9091, apiConfigCoverage) {
     isolated resource function get fhir/r4/Coverage/_history(r4:FHIRContext fhirContext) returns r4:Bundle|r4:OperationOutcome|r4:FHIRError {
         return r4:createFHIRError("Not implemented", r4:ERROR, r4:INFORMATIONAL, httpStatusCode = http:STATUS_NOT_IMPLEMENTED);
     }
-};
+}
