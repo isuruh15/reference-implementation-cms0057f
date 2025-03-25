@@ -157,28 +157,27 @@ final r4:ResourceAPIConfig apiConfig = {
             ]
         },
         {
-            name: "match",
+            name: "member-match",
             active: true,
             parameters: [
                 {
-                    name: "resource",
+                    name: "MemberPatient",
                     active: true,
                     min: 1
                 },
                 {
-                    name: "onlyCertainMatches",
-                    active: true,
-                    min: 0
-                },
-                {
-                    name: "count",
-                    active: true,
-                    min: 0
-                },
-                {
-                    name: "return",
+                    name: "Consent",
                     active: true,
                     min: 1
+                },
+                {
+                    name: "CoverageToMatch",
+                    active: true,
+                    min: 1
+                },
+                {
+                    name: "CoverageToLink",
+                    active: true
                 }
             ]
         }
