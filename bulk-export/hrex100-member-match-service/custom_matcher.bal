@@ -1,6 +1,6 @@
 import ballerina/http;
 import ballerina/log;
-import ballerina/os;
+// import ballerina/os;
 import ballerinax/health.clients.fhir;
 import ballerinax/health.fhir.r4;
 import ballerinax/health.fhir.r4.davincihrex100 as hrex100;
@@ -10,9 +10,9 @@ import ballerinax/health.fhir.r4.uscore501;
 // sample ballerina code snippet
 
 // final string patientServiceurl = os:getEnv("CHOREO_OLD_PAYER_PATIENT_CONNECTION_SERVICEURL");
-final string patientChoreoapikey = os:getEnv("CHOREO_OLD_PAYER_PATIENT_CONNECTION_CHOREOAPIKEY");
+// final string patientChoreoapikey = os:getEnv("CHOREO_OLD_PAYER_PATIENT_CONNECTION_CHOREOAPIKEY");
 // final string coverageServiceurl = os:getEnv("CHOREO_OLD_PAYER_COVERAGE_CONNECTION_SERVICEURL");
-final string coverageChoreoapikey = os:getEnv("CHOREO_OLD_PAYER_COVERAGE_CONNECTION_CHOREOAPIKEY");
+// final string coverageChoreoapikey = os:getEnv("CHOREO_OLD_PAYER_COVERAGE_CONNECTION_CHOREOAPIKEY");
 
 // final fhir:FHIRConnectorConfig fhirPatientClientConfig = {
 //     baseURL: patientServiceurl,
@@ -179,9 +179,9 @@ public isolated class DemoFHIRMemberMatcher {
     returns fhir:FHIRResponse|fhir:FHIRError {
         string requestUrl = SLASH + 'type + QUESTION_MARK + setSearchParams(searchParameters);
         map<string> headerMap = {[ACCEPT_HEADER]: "application/fhir+json"};
-        lock {
-            headerMap["Choreo-API-Key"] = patientChoreoapikey.cloneReadOnly();
-        }
+        // lock {
+        //     headerMap["Choreo-API-Key"] = patientChoreoapikey.cloneReadOnly();
+        // }
 
         do {
             http:Response response = check self.fhirPatientClient->get(requestUrl, headerMap);
@@ -198,9 +198,9 @@ public isolated class DemoFHIRMemberMatcher {
     private isolated function getById(string 'type, string id, fhir:MimeType? returnMimeType = ()) returns fhir:FHIRResponse|fhir:FHIRError {
         map<string> headerMap = {[ACCEPT_HEADER]: "application/fhir+json"};
         string requestURL = SLASH + 'type + SLASH + id;
-        lock {
-            headerMap["Choreo-API-Key"] = coverageChoreoapikey.cloneReadOnly();
-        }
+        // lock {
+        //     headerMap["Choreo-API-Key"] = coverageChoreoapikey.cloneReadOnly();
+        // }
         do {
             http:Response response = check self.fhirCoverageClient->get(requestURL, headerMap);
             fhir:FHIRResponse result = check getFhirResourceResponse(response);
