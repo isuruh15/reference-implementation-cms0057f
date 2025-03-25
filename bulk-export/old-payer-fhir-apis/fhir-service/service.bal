@@ -169,7 +169,7 @@ service /Patient on new fhirr4:Listener(9090, apiConfigPatient) {
     isolated resource function get fhir/r4/Patient/_history(r4:FHIRContext fhirContext) returns r4:Bundle|r4:OperationOutcome|r4:FHIRError {
         return r4:createFHIRError("Not implemented", r4:ERROR, r4:INFORMATIONAL, httpStatusCode = http:STATUS_NOT_IMPLEMENTED);
     }
-}
+};
 
 service /Coverage on new fhirr4:Listener(9091, apiConfigCoverage) {
 
@@ -222,4 +222,4 @@ service /Coverage on new fhirr4:Listener(9091, apiConfigCoverage) {
     isolated resource function get fhir/r4/Coverage/_history(r4:FHIRContext fhirContext) returns r4:Bundle|r4:OperationOutcome|r4:FHIRError {
         return r4:createFHIRError("Not implemented", r4:ERROR, r4:INFORMATIONAL, httpStatusCode = http:STATUS_NOT_IMPLEMENTED);
     }
-}
+};
