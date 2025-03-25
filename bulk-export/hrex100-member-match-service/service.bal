@@ -67,7 +67,7 @@ final davincihrex100:MatcherConfig matcherConfig = {
 
 final DemoFHIRMemberMatcher fhirMemberMatcher = check new ();
 
-service /internal on new fhirr4:Listener(8091, apiConfig) {
+service / on new fhirr4:Listener(8091, apiConfig) {
     isolated resource function post fhir/r4/Patient/\$member\-match(r4:FHIRContext context,
             davincihrex100:HRexMemberMatchRequestParameters parameters)
             returns davincihrex100:HRexMemberMatchResponseParameters|r4:FHIRError {
