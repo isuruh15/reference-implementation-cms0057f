@@ -38,6 +38,41 @@ paths:
             application/fhir+json:
               schema:
                 $ref: '#/components/schemas/ErrorPayload'
+  /previous/{payorId}/{coverageId}:
+    get:
+      operationId: Get Coverage
+      parameters:
+        - name: payorId
+          in: path
+          description: logical identifier
+          required: true
+          schema:
+            type: string
+        - name: coverageId
+          in: path
+          description: logical identifier
+          required: true
+          schema:
+            type: string
+      responses:
+        "201":
+          description: Created
+          content:
+            application/fhir+json:
+              schema:
+                type: object
+        "500":
+          description: InternalServerError
+          content:
+            application/fhir+json:
+              schema:
+                $ref: '#/components/schemas/ErrorPayload'
+        "400":
+          description: BadRequest
+          content:
+            application/fhir+json:
+              schema:
+                $ref: '#/components/schemas/ErrorPayload'
 components:
   schemas:
     ErrorPayload:
