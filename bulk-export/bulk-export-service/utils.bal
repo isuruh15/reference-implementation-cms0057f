@@ -71,7 +71,12 @@ public class FileCreateTask {
                     // Construct the request path
                     string reqPath = string `${exportServiceConfig.contextPath}${resourceType}/_search`;
                     // Make the POST _search request
-                    json response = check clientEp->post(path = reqPath + resourceType + "/_search", message = {},
+                    // json response = check clientEp->post(path = reqPath + resourceType + "/_search", message = {},
+                    //     headers = {"Accept": "application/fhir+json", "Content-Type": "application/fhir+json"}
+                    // );
+
+                    // Make the Search request
+                    json response = check clientEp->post(path = reqPath + resourceType , message = {},
                         headers = {"Accept": "application/fhir+json", "Content-Type": "application/fhir+json"}
                     );
 
