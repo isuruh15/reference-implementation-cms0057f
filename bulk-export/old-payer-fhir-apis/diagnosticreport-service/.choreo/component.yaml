@@ -1,7 +1,7 @@
 schemaVersion: 1.1
 endpoints:
-  - name: r4-claim-api
-    displayName: r4 Claim API
+  - name: r4-diagnosticReport-api
+    displayName: r4 DiagnosticReport API
     service:
       basePath: /
       port: 9093
@@ -9,4 +9,4 @@ endpoints:
     networkVisibilities:
       - Project
       - Public
-    schemaFilePath: oas/Claim.yaml
+    schemaFilePath: oas/DiagnosticReport.yaml

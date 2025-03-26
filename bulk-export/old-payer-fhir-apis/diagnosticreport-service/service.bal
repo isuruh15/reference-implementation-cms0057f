@@ -18,65 +18,63 @@
 import ballerina/http;
 import ballerinax/health.fhir.r4;
 import ballerinax/health.fhirr4;
-import ballerinax/health.fhir.r4.davincipas;
+import ballerinax/health.fhir.r4.international401;
+import ballerinax/health.fhir.r4.uscore501;
 
 # Generic type to wrap all implemented profiles.
 # Add required profile types here.
-# public type Claim r4:Claim|<other_Claim_Profile>;
-public type Claim davincipas:PASClaim;
+# public type DiagnosticReport r4:DiagnosticReport|<other_DiagnosticReport_Profile>;
+public type DiagnosticReport uscore501:USCoreDiagnosticReportProfileNoteExchange|uscore501:USCoreDiagnosticReportProfileLaboratoryReporting|international401:DiagnosticReport;
 
 # initialize source system endpoint here
 
 # A service representing a network-accessible API
 # bound to port `9090`.
-service / on new fhirr4:Listener(9093, apiConfig) {
+service / on new fhirr4:Listener(9094, apiConfig) {
 
     // Read the current state of single resource based on its id.
-    isolated resource function get fhir/r4/Claim/[string id](r4:FHIRContext fhirContext) returns Claim|r4:OperationOutcome|r4:FHIRError {
+    isolated resource function get fhir/r4/DiagnosticReport/[string id] (r4:FHIRContext fhirContext) returns r4:FHIRError|international401:DiagnosticReport {
         return getById(id);
     }
 
     // Read the state of a specific version of a resource based on its id.
-    isolated resource function get fhir/r4/Claim/[string id]/_history/[string vid](r4:FHIRContext fhirContext) returns Claim|r4:OperationOutcome|r4:FHIRError {
+    isolated resource function get fhir/r4/DiagnosticReport/[string id]/_history/[string vid] (r4:FHIRContext fhirContext) returns DiagnosticReport|r4:OperationOutcome|r4:FHIRError {
         return r4:createFHIRError("Not implemented", r4:ERROR, r4:INFORMATIONAL, httpStatusCode = http:STATUS_NOT_IMPLEMENTED);
     }
 
     // Search for resources based on a set of criteria.
-    isolated resource function get fhir/r4/Claim(r4:FHIRContext fhirContext) returns r4:Bundle|r4:OperationOutcome|r4:FHIRError {
+    isolated resource function get fhir/r4/DiagnosticReport (r4:FHIRContext fhirContext) returns r4:Bundle|r4:OperationOutcome|r4:FHIRError {
         map<string[]> queryParamsMap = getQueryParamsMap(fhirContext.getRequestSearchParameters());
         return search(queryParamsMap);
     }
 
     // Create a new resource.
-    isolated resource function post fhir/r4/Claim(r4:FHIRContext fhirContext, Claim procedure) returns error|http:Response {
-        davincipas:PASClaimResponse createResult = check create(procedure);
-        http:Response response = new;
-        response.setJsonPayload(createResult.toJson());
-        return response;
+    isolated resource function post fhir/r4/DiagnosticReport (r4:FHIRContext fhirContext, DiagnosticReport procedure) returns DiagnosticReport|r4:OperationOutcome|r4:FHIRError {
+        return r4:createFHIRError("Not implemented", r4:ERROR, r4:INFORMATIONAL, httpStatusCode = http:STATUS_NOT_IMPLEMENTED);
     }
 
     // Update the current state of a resource completely.
-    isolated resource function put fhir/r4/Claim/[string id](r4:FHIRContext fhirContext, Claim claim) returns Claim|r4:OperationOutcome|r4:FHIRError {
+    isolated resource function put fhir/r4/DiagnosticReport/[string id] (r4:FHIRContext fhirContext, DiagnosticReport diagnosticreport) returns DiagnosticReport|r4:OperationOutcome|r4:FHIRError {
         return r4:createFHIRError("Not implemented", r4:ERROR, r4:INFORMATIONAL, httpStatusCode = http:STATUS_NOT_IMPLEMENTED);
     }
 
     // Update the current state of a resource partially.
-    isolated resource function patch fhir/r4/Claim/[string id](r4:FHIRContext fhirContext, json patch) returns Claim|r4:OperationOutcome|r4:FHIRError {
+    isolated resource function patch fhir/r4/DiagnosticReport/[string id] (r4:FHIRContext fhirContext, json patch) returns DiagnosticReport|r4:OperationOutcome|r4:FHIRError {
         return r4:createFHIRError("Not implemented", r4:ERROR, r4:INFORMATIONAL, httpStatusCode = http:STATUS_NOT_IMPLEMENTED);
     }
 
     // Delete a resource.
-    isolated resource function delete fhir/r4/Claim/[string id](r4:FHIRContext fhirContext) returns r4:OperationOutcome|r4:FHIRError {
+    isolated resource function delete fhir/r4/DiagnosticReport/[string id] (r4:FHIRContext fhirContext) returns r4:OperationOutcome|r4:FHIRError {
         return r4:createFHIRError("Not implemented", r4:ERROR, r4:INFORMATIONAL, httpStatusCode = http:STATUS_NOT_IMPLEMENTED);
     }
 
     // Retrieve the update history for a particular resource.
-    isolated resource function get fhir/r4/Claim/[string id]/_history(r4:FHIRContext fhirContext) returns r4:Bundle|r4:OperationOutcome|r4:FHIRError {
+    isolated resource function get fhir/r4/DiagnosticReport/[string id]/_history (r4:FHIRContext fhirContext) returns r4:Bundle|r4:OperationOutcome|r4:FHIRError {
         return r4:createFHIRError("Not implemented", r4:ERROR, r4:INFORMATIONAL, httpStatusCode = http:STATUS_NOT_IMPLEMENTED);
     }
 
     // Retrieve the update history for all resources.
-    isolated resource function get fhir/r4/Claim/_history(r4:FHIRContext fhirContext) returns r4:Bundle|r4:OperationOutcome|r4:FHIRError {
+    isolated resource function get fhir/r4/DiagnosticReport/_history (r4:FHIRContext fhirContext) returns r4:Bundle|r4:OperationOutcome|r4:FHIRError {
         return r4:createFHIRError("Not implemented", r4:ERROR, r4:INFORMATIONAL, httpStatusCode = http:STATUS_NOT_IMPLEMENTED);
     }
 }

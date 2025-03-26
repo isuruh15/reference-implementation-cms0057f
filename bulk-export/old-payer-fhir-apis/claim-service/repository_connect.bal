@@ -65,20 +65,20 @@ public isolated function search(map<string[]>? searchParameters = ()) returns r4
     };
 
     if searchParameters is map<string[]> {
-        // if searchParameters.keys().count() == 1 {
-        //     lock {
-        //         r4:BundleEntry[] bundleEntries = [];
-        //         foreach var item in claims {
-        //             r4:BundleEntry bundleEntry = {
-        //                 'resource: item
-        //             };
-        //             bundleEntries.push(bundleEntry);
-        //         }
-        //         r4:Bundle BundleClone = bundle.clone();
-        //         BundleClone.entry = bundleEntries;
-        //         return BundleClone.clone();
-        //     }
-        // }
+        if searchParameters.keys().count() == 0 {
+            lock {
+                r4:BundleEntry[] bundleEntries = [];
+                foreach var item in claims {
+                    r4:BundleEntry bundleEntry = {
+                        'resource: item
+                    };
+                    bundleEntries.push(bundleEntry);
+                }
+                r4:Bundle BundleClone = bundle.clone();
+                BundleClone.entry = bundleEntries;
+                return BundleClone.clone();
+            }
+        }
 
         foreach var 'key in searchParameters.keys() {
             match 'key {
