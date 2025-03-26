@@ -260,7 +260,7 @@ isolated function getFhirResourceResponse(http:Response response) returns fhir:F
     do {
         xml|json responseBody = check response.getJsonPayload();
         int statusCode = response.statusCode;
-        if statusCode == 201 {
+        if statusCode == 201 || statusCode == 200{
             return {httpStatusCode: statusCode, 'resource: responseBody, serverResponseHeaders: {}};
         } else {
             return error("FHIR_SERVER_ERROR", httpStatusCode = statusCode, 'resource = responseBody, serverResponseHeaders = {});

@@ -25,6 +25,7 @@ configurable BulkExportServerConfig sourceServerConfig = ?;
 configurable BulkExportClientConfig clientServiceConfig = ?;
 configurable TargetServerConfig targetServerConfig = ?;
 configurable string sourceServerBaseURL = ?;
+configurable string coverageServiceBaseURL = ?;
 
 http:OAuth2ClientCredentialsGrantConfig config = {
     tokenUrl: sourceServerConfig.tokenUrl,
@@ -35,7 +36,7 @@ http:OAuth2ClientCredentialsGrantConfig config = {
 
 isolated http:Client statusClient = check new (sourceServerConfig.baseUrl);
 isolated http:Client payerFhirClient = check new (sourceServerBaseURL);
-
+isolated http:Client oldPayerCoverageClient = check new (coverageServiceBaseURL);
 isolated service /bulk on new http:Listener(9099) {
 
     function init() returns error? {
@@ -296,6 +297,27 @@ isolated service /member on new http:Listener(7099) {
         do {
             lock {
                 response = check payerFhirClient->post(requestURL, parametersResource.clone().toJson(), headerMap.clone());
+            }
+            log:printInfo((check response.getJsonPayload()).toBalString());
+            fhir:FHIRResponse readRes = check getFhirResourceResponse(response);
+            return readRes.'resource.toJson();
+        } on fail error e {
+            if e is fhir:FHIRError {
+                return e;
+            }
+            return error(string `FHIR_CONNECTOR_ERROR: ${e.message()}`, errorDetails = e);
+        }
+
+    }
+
+    isolated resource function get previous/[string payorId]/[string coverageId]() returns error|json {
+
+        map<string> headerMap = {["Accept"]: "application/fhir+json", ["Content-Type"]: "application/fhir+json"};
+        string requestURL = string `/Coverage/${coverageId}`;
+        http:Response response;
+        do {
+            lock {
+                response = check oldPayerCoverageClient->get(requestURL, headerMap.clone());
             }
             log:printInfo((check response.getJsonPayload()).toBalString());
             fhir:FHIRResponse readRes = check getFhirResourceResponse(response);
