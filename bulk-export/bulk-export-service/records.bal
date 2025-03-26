@@ -30,23 +30,23 @@ public type SearchServerConfig record {
     string clientSecret = "";
     string[] scopes = [];
     string[] types = [
-        "AllergyIntolerence",
-        "CarePlan",
-        "CareTeam",
-        "Condition",
-        "Coverage",
-        "Device",
+        // "AllergyIntolerence",
+        // "CarePlan",
+        "Claim",
+        // "Condition",
+        // "Coverage",
+        // "Device",
         "DiagnosticReport",
-        "DocumentReference",
-        "Encounter",
-        "Goal",
-        "Immunization",
-        "MedicationRequest",
-        "Observation",
-        "Organization",
-        "Patient",
-        "Practitioner",
-        "Procedure"
+        // "DocumentReference",
+        "Encounter"
+        // "Goal",
+        // "Immunization",
+        // "MedicationRequest",
+        // "Observation",
+        // "Organization",
+        // "Patient",
+        // "Practitioner",
+        // "Procedure"
     ];
 };
 
