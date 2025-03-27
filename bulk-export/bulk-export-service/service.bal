@@ -21,7 +21,7 @@ import ballerinax/health.fhir.r4.international401;
 configurable SearchServerConfig searchServerConfig = ?;
 configurable BulkExportServerConfig exportServiceConfig = ?;
 
-service / on new http:Listener(8081) {
+service /bulk on new http:Listener(8090) {
     isolated resource function get fhir/r4/Patient/export() returns r4:OperationOutcome|r4:FHIRError {
         string exportTaskId = uuid:createType1AsString();
         error? executionResult = executeJob(exportTaskId, searchServerConfig, exportServiceConfig, ());
