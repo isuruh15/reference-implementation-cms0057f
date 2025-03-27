@@ -78,10 +78,11 @@ public class FileCreateTask {
                         reqPath = string `${reqPath}/?patient=${<string>self.patientId}`;
                     }
                     // Make the POST _search request
-                    // json response = check clientEp->post(path = reqPath + resourceType + "/_search", message = {},
+                    // json response = check clientEp->post(path = reqPath , message = {},
                     //     headers = {"Accept": "application/fhir+json", "Content-Type": "application/fhir+json"}
                     // );
 
+                    log:printDebug(string `Request URL: ${reqPath}`);
                     // Make the Search request
                     json response = check clientEp->get(path = reqPath,
                         headers = {"Accept": "application/fhir+json", "Content-Type": "application/fhir+json"}
