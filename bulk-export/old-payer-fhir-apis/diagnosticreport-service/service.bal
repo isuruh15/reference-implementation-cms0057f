@@ -30,7 +30,7 @@ public type DiagnosticReport uscore501:USCoreDiagnosticReportProfileNoteExchange
 
 # A service representing a network-accessible API
 # bound to port `9090`.
-service / on new fhirr4:Listener(9094, apiConfig) {
+service / on new fhirr4:Listener(9092, apiConfig) {
 
     // Read the current state of single resource based on its id.
     isolated resource function get fhir/r4/DiagnosticReport/[string id] (r4:FHIRContext fhirContext) returns r4:FHIRError|international401:DiagnosticReport {
