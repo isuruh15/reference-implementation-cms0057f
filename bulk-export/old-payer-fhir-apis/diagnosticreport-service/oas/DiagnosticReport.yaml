@@ -186,7 +186,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/DiagnosticReport"
+              type: object
       responses:
         "201":
           description: Successfully created DiagnosticReport
@@ -209,7 +209,7 @@ paths:
           content:
             application/fhir+json:
               schema:
-                $ref: "#/components/schemas/DiagnosticReport"
+                type: object
       security:
         - default: []
       x-auth-type: Application & Application User

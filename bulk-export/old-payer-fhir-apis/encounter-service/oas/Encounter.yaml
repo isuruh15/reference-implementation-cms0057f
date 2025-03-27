@@ -184,9 +184,9 @@ paths:
       requestBody:
         required: true
         content:
-          application/json:
+          application/fhir+json:
             schema:
-              $ref: "#/components/schemas/Encounter"
+              type: object
       responses:
         "201":
           description: Successfully created Encounter
@@ -209,7 +209,7 @@ paths:
           content:
             application/fhir+json:
               schema:
-                $ref: "#/components/schemas/Encounter"
+                type: object
       security:
         - default: []
       x-auth-type: Application & Application User
