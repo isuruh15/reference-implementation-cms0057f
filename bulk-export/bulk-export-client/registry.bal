@@ -33,12 +33,14 @@ public type PollingEvent record {|
 # + lastUpdated - timestamp of the last polling event  
 # + lastStatus - export status recieved from the last polling event  
 # + pollingEvents - array of polling events
+# + exportedFiles - array of filenames that are exported
 public type ExportTask record {|
 
     string id;
     time:Utc lastUpdated?;
     string lastStatus;
     PollingEvent[] pollingEvents;
+    string[]? exportedFiles;
 
 |};
 

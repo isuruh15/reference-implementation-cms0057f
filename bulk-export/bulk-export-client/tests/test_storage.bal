@@ -22,7 +22,8 @@ function testAddExportTaskToMemory() {
         id: "test-id",
         lastUpdated: time:utcNow(),
         lastStatus: "Pending",
-        pollingEvents: []
+        pollingEvents: [],
+        exportedFiles: []
     };
 
     boolean result = addExportTasktoMemory(testMap, testTask);
@@ -40,7 +41,8 @@ function testAddPollingEventToMemory() {
         id: "test-id",
         lastUpdated: time:utcNow(),
         lastStatus: "Pending",
-        pollingEvents: []
+        pollingEvents: [],
+        exportedFiles: []
     };
     map<ExportTask> testMap = {"test-id": testTask};
 
@@ -67,11 +69,12 @@ function testUpdateExportTaskStatusInMemory() {
         id: "test-id",
         lastUpdated: time:utcNow(),
         lastStatus: "Pending",
-        pollingEvents: []
+        pollingEvents: [],
+        exportedFiles: []
     };
     map<ExportTask> testMap = {"test-id": testTask};
 
-    boolean result = updateExportTaskStatusInMemory(testMap, "test-id", "Completed");
+    boolean result = updateExportTaskStatusInMemory(testMap, "test-id", "Completed", []);
     test:assertTrue(result);
     test:assertEquals(testMap.get("test-id").lastStatus, "Completed");
     test:assertFalse(testMap.get("test-id").lastUpdated < testTask.lastUpdated);

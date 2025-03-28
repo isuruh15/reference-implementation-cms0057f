@@ -37,6 +37,7 @@ http:OAuth2ClientCredentialsGrantConfig config = {
 isolated http:Client statusClient = check new (sourceServerConfig.baseUrl);
 isolated http:Client payerFhirClient = check new (sourceServerBaseURL);
 isolated http:Client oldPayerCoverageClient = check new (coverageServiceBaseURL);
+
 isolated service /bulk on new http:Listener(9099) {
 
     function init() returns error? {
@@ -77,7 +78,7 @@ isolated service /bulk on new http:Listener(9099) {
         do {
 
             lock {
-                ExportTask exportTask = {id: taskId, lastStatus: "in-progress", pollingEvents: []};
+                ExportTask exportTask = {id: taskId, lastStatus: "in-progress", pollingEvents: [], exportedFiles: []};
                 isSuccess = addTaskFunction(exportTasks, exportTask);
             }
             string queryString = populateQueryString(_outputFormat, _since, _type);
@@ -129,7 +130,7 @@ isolated service /bulk on new http:Listener(9099) {
         do {
 
             lock {
-                ExportTask exportTask = {id: taskId, lastStatus: "in-progress", pollingEvents: []};
+                ExportTask exportTask = {id: taskId, lastStatus: "in-progress", pollingEvents: [], exportedFiles: []};
                 isSuccess = addTaskFunction(exportTasks, exportTask);
             }
             international401:Parameters parametersResource = populateParamsResource(matchedPatients, _outputFormat, _since, _type);
@@ -185,7 +186,7 @@ isolated service /bulk on new http:Listener(9099) {
         do {
 
             lock {
-                ExportTask exportTask = {id: taskId, lastStatus: "in-progress", pollingEvents: []};
+                ExportTask exportTask = {id: taskId, lastStatus: "in-progress", pollingEvents: [], exportedFiles: []};
                 isSuccess = addTaskFunction(exportTasks, exportTask);
             }
             string queryString = populateQueryString(_outputFormat, _since, _type);

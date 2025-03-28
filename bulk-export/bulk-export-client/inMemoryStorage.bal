@@ -36,11 +36,12 @@ isolated function addPollingEventToMemory(map<ExportTask> taskMap, PollingEvent 
     return true;
 }
 
-isolated function updateExportTaskStatusInMemory(map<ExportTask> taskMap, string exportTaskId, string newStatus) returns boolean {
+isolated function updateExportTaskStatusInMemory(map<ExportTask> taskMap, string exportTaskId, string newStatus, string[] downloadedFileTypes) returns boolean {
 
     ExportTask exportTask = taskMap.get(exportTaskId);
     exportTask.lastUpdated = time:utcNow();
     exportTask.lastStatus = newStatus;
+    exportTask.exportedFiles = downloadedFileTypes;
     return true;
 }
 

@@ -115,10 +115,12 @@ public isolated function sendFileFromFSToFTP(TargetServerConfig config, string s
 public isolated function downloadFiles(json exportSummary, string exportId) returns error? {
 
     ExportSummary exportSummary1 = check exportSummary.cloneWithType(ExportSummary);
+    string[] exportedFileTypes = [];
 
     foreach OutputFile item in exportSummary1.output {
         log:printDebug("Downloading the file.", url = item.url);
         error? downloadFileResult = saveFileInFS(item.url, string `${clientServiceConfig.targetDirectory}${file:pathSeparator}${exportId}${file:pathSeparator}${item.'type}-exported.ndjson`);
+        exportedFileTypes.push(string `${item.'type}.ndjson`);
         if downloadFileResult is error {
             log:printError("Error occurred while downloading the file.", downloadFileResult);
         }
@@ -133,7 +135,7 @@ public isolated function downloadFiles(json exportSummary, string exportId) retu
         }
     }
     lock {
-        boolean _ = updateExportTaskStatusInMemory(taskMap = exportTasks, exportTaskId = exportId, newStatus = "Downloaded");
+        boolean _ = updateExportTaskStatusInMemory(taskMap = exportTasks, exportTaskId = exportId, newStatus = "Downloaded", downloadedFileTypes = exportedFileTypes.clone());
     }
     log:printInfo("All files downloaded successfully.");
     return null;
@@ -260,7 +262,7 @@ isolated function getFhirResourceResponse(http:Response response) returns fhir:F
     do {
         xml|json responseBody = check response.getJsonPayload();
         int statusCode = response.statusCode;
-        if statusCode == 201 || statusCode == 200{
+        if statusCode == 201 || statusCode == 200 {
             return {httpStatusCode: statusCode, 'resource: responseBody, serverResponseHeaders: {}};
         } else {
             return error("FHIR_SERVER_ERROR", httpStatusCode = statusCode, 'resource = responseBody, serverResponseHeaders = {});
@@ -300,7 +302,7 @@ public class PollingTask {
                         // unschedule the job
                         self.setLastStaus("Completed");
                         lock {
-                            boolean _ = updateExportTaskStatusInMemory(taskMap = exportTasks, exportTaskId = self.exportId, newStatus = "Export Completed. Downloading files.");
+                            boolean _ = updateExportTaskStatusInMemory(taskMap = exportTasks, exportTaskId = self.exportId, newStatus = "Export Completed. Downloading files.", downloadedFileTypes = []);
                         }
                         json payload = check statusResponse.getJsonPayload();
                         log:printDebug("Export task completed.", exportId = self.exportId, payload = payload);
