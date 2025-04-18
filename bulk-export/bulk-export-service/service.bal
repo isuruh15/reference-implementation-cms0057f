@@ -22,7 +22,7 @@ configurable SearchServerConfig searchServerConfig = ?;
 configurable BulkExportServerConfig exportServiceConfig = ?;
 
 service /bulk on new http:Listener(8090) {
-    isolated resource function get fhir/r4/Patient/export() returns r4:OperationOutcome|r4:FHIRError {
+    isolated resource function get fhir/export() returns r4:OperationOutcome|r4:FHIRError {
         string exportTaskId = uuid:createType1AsString();
         error? executionResult = executeJob(exportTaskId, searchServerConfig, exportServiceConfig, ());
         if executionResult is error {
@@ -32,7 +32,7 @@ service /bulk on new http:Listener(8090) {
         addExportTasktoMemory(exportTaskId, time:utcNow());
 
         return createOpereationOutcome("information", "processing",
-                "Your request has been accepted. You can check its status at " + exportServiceConfig.baseUrl + "/fhir/bulkstatus/" + exportTaskId);
+                "Your request has been accepted. You can check its status at " + exportServiceConfig.baseUrl + "/bulk/fhir/bulkstatus/" + exportTaskId);
     }
 
     isolated resource function post fhir/r4/Patient/export(
