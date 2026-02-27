@@ -51,6 +51,7 @@ import { updateLoggedUser, updateCoverageIds } from "../redux/loggedUserSlice";
 interface Payer {
   id: string;
   name: string;
+  address: { state?: string }[];
 }
 
 export const LandingPage = () => {
@@ -182,13 +183,17 @@ export const LandingPage = () => {
     const selectedPayer = payerList.find((p) => p.id === selectedOrgId);
 
     const payload = {
-      memberId: loggedUser.id,
-      oldPayerName: selectedPayer?.name || "",
-      oldPayerId: String(selectedOrgId),
-      oldCoverageId: coverageId,
-      coverageStartDate: coverageStartDate || "",
-      coverageEndDate: coverageEndDate || "",
+      bulkDataSyncStatus: "PENDING",
       consent: "approved",
+      coverageEndDate: coverageEndDate || "",
+      coverageStartDate: coverageStartDate || "",
+      createdDate: "",
+      memberId: loggedUser.id,
+      oldCoverageId: coverageId,
+      oldPayerName: selectedPayer?.name || "",
+      oldPayerState: selectedPayer?.address?.[0]?.state || "",
+      payerId: String(selectedOrgId),
+      requestId: crypto.randomUUID(),
     };
 
     try {
@@ -201,9 +206,6 @@ export const LandingPage = () => {
         headers: { "Content-Type": "application/json" },
       });
 
-      dispatch(
-        updateCdsResponse({ cards: response.data, systemActions: {} })
-      );
       setAlertMessage("Data exchange initiated successfully!");
       setAlertSeverity("success");
       setOpenSnackbar(true);
